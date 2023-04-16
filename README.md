@@ -46,4 +46,5 @@ The Restaurant Reviews application has the following features:
 Contributions to this project are welcome! If you find a bug or would like to suggest a new feature, please open an issue on GitHub. If you would like to contribute * code, please fork the repository and submit a pull request.
 
 **License**
+
 This project is licensed under the MIT License - see the LICENSE.md file for details.
