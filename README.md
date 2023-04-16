@@ -1,4 +1,4 @@
-# Restaurant-Recommendation-WebSite
+## Restaurant-Recommendation-WebSite
 This is a Python project that allows users to view and write reviews for restaurants. The project includes a Django web application that manages restaurants, reviews, users, and menu items.
 
 **Getting Started**
