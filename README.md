@@ -5,8 +5,8 @@ This is a Python project that allows users to view and write reviews for restaur
 
 To get started with the project, clone the repository and navigate to the project directory:
 
-```git clone https://github.com/yourusername/restaurant-reviews.git`
-cd restaurant-reviews```
+```git clone https://github.com/yourusername/restaurant-reviews.git```
+```cd Restaurant-Recommendation-WebSite```
 
 **Prerequisites**
 
