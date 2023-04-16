@@ -29,7 +29,7 @@ The Restaurant Reviews application has the following features:
 - Updating a user's profile information, including username, email, and password
 - Code Structure
 
-** The project is structured as follows: **
+**The project is structured as follows:**
 
 * `manage.py`: the command-line utility for interacting with the Django project
 * `restaurant_reviews/`: the main Django application
