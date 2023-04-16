@@ -6,6 +6,7 @@ This is a Python project that allows users to view and write reviews for restaur
 To get started with the project, clone the repository and navigate to the project directory:
 
 ```git clone https://github.com/yourusername/restaurant-reviews.git```
+
 ```cd Restaurant-Recommendation-WebSite```
 
 **Prerequisites**
@@ -39,7 +40,9 @@ The Restaurant Reviews application has the following features:
 * `templates/`: the HTML templates for the application
 * `static/`: the static assets (CSS, JavaScript, etc.) for the application
 * `db.sqlite3`: the SQLite database used by the application
+
 **Contributing**
+
 Contributions to this project are welcome! If you find a bug or would like to suggest a new feature, please open an issue on GitHub. If you would like to contribute * code, please fork the repository and submit a pull request.
 
 **License**
