@@ -9,7 +9,7 @@ To get started with the project, clone the repository and navigate to the projec
 
 ```cd Restaurant-Recommendation-WebSite```
 
-** Prerequisites
+## Prerequisites
 
 This project requires Python 3 and Django. If you don't have Python installed, you can download it from the official website. To install Django, run the following command:
 
@@ -17,7 +17,7 @@ This project requires Python 3 and Django. If you don't have Python installed, y
 
 This will start the web server on http://localhost:8000/. You can access the application by opening this URL in your web browser.
 
-**Features**
+## Features
 The Restaurant Reviews application has the following features:
 
 - Viewing a list of restaurants
@@ -29,7 +29,7 @@ The Restaurant Reviews application has the following features:
 - Updating a user's profile information, including username, email, and password
 - Code Structure
 
-**The project is structured as follows:**
+** The project is structured as follows: **
 
 * `manage.py`: the command-line utility for interacting with the Django project
 * `restaurant_reviews/`: the main Django application
@@ -41,10 +41,10 @@ The Restaurant Reviews application has the following features:
 * `static/`: the static assets (CSS, JavaScript, etc.) for the application
 * `db.sqlite3`: the SQLite database used by the application
 
-**Contributing**
+## Contributing
 
 Contributions to this project are welcome! If you find a bug or would like to suggest a new feature, please open an issue on GitHub. If you would like to contribute * code, please fork the repository and submit a pull request.
 
-**License**
+## License
 
 This project is licensed under the MIT License - see the LICENSE.md file for details.
