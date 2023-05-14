@@ -3,7 +3,7 @@
   <head>
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
     <meta charset="utf-8">
-      <style>
+        <style>
 :root {
   --bg: #EDF2F0;
   --neu-1: #ecf0f3;
@@ -289,7 +289,7 @@ body{
   <body>
     <div class="main">
       <div class="container a-container" id="a-container">
-        <form id="a-form" class="form" method="POST" action="" type="Signup">
+        <form id="a-form" class="form" method="POST" action="index.html" type="Signup" name="Signup">
           {% csrf_token %}
           <h2 class="title">Sign up</h2>
           <span class="form__span">or use email for registration</span>
@@ -307,11 +307,12 @@ body{
             <label>
                 <input class="form__input" type="password" placeholder="Password">
             </label>
-            <button class="form__button button submit">SIGN UP</button>
+            <button class="form__button button submit" type="submit">SIGN UP</button>
+            <div id="register-message"></div>
         </form>
       </div>
       <div class="container b-container" id="b-container">
-       <form id="b-form" class="form" method="POST" action="" type="Signin">
+       <form id="b-form" class="form" method="POST" action="" type="Signin" name="Signin">
            {% csrf_token %}
            <h2 class="form_title title">Sign in to Website</h2>
            <span class="form__span">or use your email account</span>
@@ -327,11 +328,11 @@ body{
                <input class="form__input" type="password" placeholder="Password">
            </label>
            <a class="form__link">Forgot your password?</a>
-           <button class="form__button button submit">SIGN IN</button>
+           <button class="form__button button submit" type="submit">SIGN IN</button>
        </form>
       </div>
       <div class="container b-container" id="b-container">
-        <form id="b-form" class="form" method="POST" action="">
+        <form id="b-form" class="form" method="POST" action="index.html">
         <h2 class="form_title title">Sign in to Website</h2>
         <span class="form__span">or use your email account</span>
             <label>
@@ -341,7 +342,7 @@ body{
                 <input class="form__input" type="password" placeholder="Password">
             </label>
             <a class="form__link">Forgot your password?</a>
-        <button class="form__button button submit">SIGN IN</button>
+        <button class="form__button button submit to-login">SIGN IN</button>
         </form>
       </div>
 
@@ -372,20 +373,42 @@ body{
             let getButtons = (e) => e.preventDefault()
 
             let changeForm = (e) => {
-                switchCtn.classList.add("is-gx");
-                setTimeout(function(){
-                    switchCtn.classList.remove("is-gx");
+                {#switchCtn.classList.add("is-gx");#}
+                {#setTimeout(function(){#}
+                {#    switchCtn.classList.remove("is-gx");#}
+                {#    }, 1500)#}
+                {##}
+                {#switchCtn.classList.toggle("is-txr");#}
+                {#switchCircle[0].classList.toggle("is-txr");#}
+                {#switchCircle[1].classList.toggle("is-txr");#}
+                {##}
+                {#switchC1.classList.toggle("is-hidden");#}
+                {#switchC2.classList.toggle("is-hidden");#}
+                {#aContainer.classList.toggle("is-txl");#}
+                {#bContainer.classList.toggle("is-txl");#}
+                {#bContainer.classList.toggle("is-z200");#}
+                if (e.target.classList.contains("to-login")) {
+                    switchC1.classList.add("is-hidden");
+                    switchC2.classList.remove("is-hidden");
+                    aContainer.classList.remove("is-txl");
+                    bContainer.classList.remove("is-txl");
+                    bContainer.classList.remove("is-z200");
+                } else {
+                    switchCtn.classList.add("is-gx");
+                    setTimeout(function(){
+                        switchCtn.classList.remove("is-gx");
                     }, 1500)
 
-            switchCtn.classList.toggle("is-txr");
-            switchCircle[0].classList.toggle("is-txr");
-            switchCircle[1].classList.toggle("is-txr");
+                    switchCtn.classList.toggle("is-txr");
+                    switchCircle[0].classList.toggle("is-txr");
+                    switchCircle[1].classList.toggle("is-txr");
 
-            switchC1.classList.toggle("is-hidden");
-            switchC2.classList.toggle("is-hidden");
-            aContainer.classList.toggle("is-txl");
-            bContainer.classList.toggle("is-txl");
-            bContainer.classList.toggle("is-z200");
+                    switchC1.classList.toggle("is-hidden");
+                    switchC2.classList.toggle("is-hidden");
+                    aContainer.classList.toggle("is-txl");
+                    bContainer.classList.toggle("is-txl");
+                    bContainer.classList.toggle("is-z200");
+                }
             }
 
             let mainF = (e) => {
@@ -394,8 +417,28 @@ body{
                 for (var i = 0; i < switchBtn.length; i++)
                     switchBtn[i].addEventListener("click", changeForm)
             }
+            let registerUser = (e) => {
+                e.preventDefault();
+                let form = e.target.closest("form");
+                let formData = new FormData(form);
+
+                fetch("/register", {
+                    method: "POST",
+                    body: formData,
+                })
+                .then(response => {
+                    if (response.ok) {
+                        form.reset();
+                        document.querySelector("#register-message").textContent = "Registration successful!";
+                    } else {
+                        document.querySelector("#register-message").textContent = "Registration failed.";
+                    }
+                })
+                .catch(error => console.error(error));
+            };
             window.addEventListener("load", mainF);
         </script>
     </div>
   </body>
 </html>
+

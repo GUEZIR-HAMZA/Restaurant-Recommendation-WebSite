@@ -1,0 +1,121 @@
+/* header styling */
+  header {
+    background-color: #fff;
+    border-bottom: 1px solid #ccc;
+    padding: 20px 0;
+  }
+
+  .title-container {
+    display: flex;
+    align-items: center;
+  }
+
+  .title {
+    font-size: 28px;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  .title a {
+    text-decoration: none;
+    color: #333;
+  }
+
+  .auth-links {
+    margin-left: auto;
+  }
+
+  .auth-links a {
+    color: #333;
+    margin-left: 10px;
+  }
+
+  /* restaurant row styling */
+  .restaurant-row {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    padding: 20px;
+  }
+
+  .restaurant-row img {
+    max-width: 100%;
+    height: auto;
+    margin-right: 20px;
+  }
+
+  .cell {
+    flex: 1;
+    padding: 10px;
+  }
+
+  /* search and sort styling */
+  .search-sort {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .search-sort form {
+    display: inline-block;
+    margin-right: 10px;
+  }
+
+  .search-sort label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .search-sort input[type="text"] {
+    padding: 10px;
+    font-size: 18px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 300px;
+    margin-right: 10px;
+  }
+
+  .search-sort button[type="submit"] {
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .sort-options {
+    display: inline-block;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .sort-options li {
+    display: inline-block;
+    margin-right: 10px;
+  }
+
+  .sort-options li a {
+    text-decoration: none;
+    color: #333;
+    font-size: 18px;
+    border: 1px solid #ccc;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+  }
+
+  .sort-options li a:hover {
+    background-color: #333;
+    color: #fff;
+  }
+
+  .navbar {
+  margin-top: 0;
+  margin-bottom: 0;
+}

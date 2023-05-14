@@ -10,7 +10,9 @@ from Restaurant_Recommendation_WebSite.models import Restaurant
 
 #################### USER AUTHENTICATION ####################
 def home(request):
-    return render(request, 'index.html', {})
+    restaurants = Restaurant.objects.all()
+    context = {'restaurants': list(restaurants)}
+    return render(request, 'index.html', context)
 
 
 def auth(request):
@@ -62,47 +64,6 @@ def auth(request):
     })
 
 
-# def register(request):
-#     if request.method == 'POST':
-#         # Get form data
-#         username = request.POST['username']
-#         email = request.POST['email']
-#         password = request.POST['password']
-#         password_confirm = request.POST['password_confirm']
-#
-#         # Validate form data
-#         if password != password_confirm:
-#             return render(request, '../templates/auth.html', {'error': 'Passwords do not match'})
-#
-#         if User.objects.filter(username=username).exists():
-#             return render(request, '../templates/auth.html', {'error': 'Username already exists'})
-#
-#         if User.objects.filter(email=email).exists():
-#             return render(request, '../templates/auth.html', {'error': 'Email already exists'})
-#
-#         # Create new user
-#         User.objects.create_user(username=username, email=email, password=password)
-#
-#         return redirect('login')
-#
-#     return render(request, '../templates/auth.html')
-#
-
-# def user_login(request):
-#     if request.method == 'POST':
-#         username = request.POST.get('username')
-#         password = request.POST.get('password')
-#         user = authenticate(request, username=username, password=password)
-#         if user is not None:
-#             login(request, user)
-#             return redirect('home')
-#         else:
-#             error_message = 'Invalid login credentials'
-#             return render(request, '../templates/auth.html', {'error_message': error_message})
-#     else:
-#         return render(request, '../templates/auth.html')
-
-
 def user_logout(request):
     logout(request)
     return redirect('index')
@@ -112,10 +73,23 @@ def user_logout(request):
 
 ####################### RESTAURANT SEARCH #######################
 
-def search(request):
-    if request.method == 'POST':
-        search_text = request.POST['search_text']
+def search(request, search_text):
+    try:
+        restaurants = Restaurant.objects.filter(name__contains=search_text)
+    except Restaurant.DoesNotExist:
+        error_message = 'No restaurants found matching your search criteria.'
+        return render(request, 'index.html', {'error_message': error_message})
     else:
-        search_text = ''
-    restaurants = Restaurant.objects.filter(name__contains=search_text)
-    return render(request, 'index.html', {'restaurants': restaurants})
+        return render(request, 'index.html', {'restaurants': restaurants})
+
+
+# def restaurant_list(request):
+#     restaurants = Restaurant.objects.all()
+#     context = {'restaurants': restaurants}
+#     return render(request, 'index.html', context)
+
+
+def restaurant_details(request, restaurant_id):
+    restaurant = Restaurant.objects.get(id=restaurant_id)
+    context = {'restaurant': restaurant}
+    return render(request, 'restaurant_details.html', context)
