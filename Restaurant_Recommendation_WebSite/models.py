@@ -59,6 +59,14 @@ def scrape_restaurant_data():
     print('Restaurants added successfully')
 
 
+class restaurant_image(models.Model):
+    restaurant = models.ForeignKey('Restaurant', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='restaurants', blank=True, null=True)
+
+    def __str__(self):
+        return self.restaurant.name
+
+
 class Restaurant(models.Model):
     name = models.CharField(max_length=50)
     address = models.CharField(max_length=100)
@@ -71,7 +79,6 @@ class Restaurant(models.Model):
     acceptsReservations = models.BooleanField(default=False)
     offersDelivery = models.BooleanField(default=False)
     rating = models.FloatField(default=0)
-    image = models.ImageField(upload_to='restaurant_images/', blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -117,31 +124,19 @@ class Users(models.Model):
     username = models.CharField(max_length=50, unique=True)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=50)
-    favorites = models.ManyToManyField(Restaurant)
+    favorites = models.ManyToManyField(Restaurant, blank=True)
 
     def __str__(self):
         return self.username
 
-    def register(self, username, email, password):
-        self.username = username
-        self.email = email
-        self.password = make_password(password)
-        self.save()
+    def get_favorites(self):
+        return self.favorites.all()
 
-    def login(self, username, password):
-        if self.username == username and check_password(password, self.password):
-            return True
-        return False
+    def add_favorite(self, restaurant):
+        self.favorites.add(restaurant)
 
-    def update_profile(self, username, email, password):
-        self.username = username
-        self.email = email
-        self.password = make_password(password)
-        self.save()
-
-    def write_review(self, restaurant, rating, comment):
-        review = Reviews.objects.create(user=self, restaurant=restaurant, rating=rating, comment=comment)
-        return review
+    def remove_favorite(self, restaurant):
+        self.favorites.remove(restaurant)
 
 
 class MenuItem(models.Model):

@@ -1,0 +1,1 @@
+default_app_config = 'Restaurant_Recommendation_WebSite.apps.RestoRecommendationConfig'

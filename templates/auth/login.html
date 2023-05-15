@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login Form</title>
+  <link rel="stylesheet" href="{% static 'auth/login.css' %}">
+  <!-- Font Awesome Cdn Link -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+  <div class="wrapper">
+    <h1>Hello Again!</h1>
+    <p>Welcome back, you've been missed!</p>
+    <form method="post" action="{% url 'login' %}">
+      {% csrf_token %}
+        <label>
+            <input type="text" name="username" placeholder="Enter username" required>
+        </label>
+        <label>
+            <input type="password" name="password" placeholder="Password" required>
+        </label>
+        <p class="recover">
+        <a href="#">Recover Password</a>
+      </p>
+      <button type="submit">Sign in</button>
+    </form>
+    <p class="or">
+      ----- or continue with -----
+    </p>
+    <div class="icons">
+      <i class="fab fa-google"></i>
+      <i class="fab fa-twitter"></i>
+      <i class="fab fa-facebook"></i>
+    </div>
+    <div class="not-member">
+      Not a member? <a href="{% url 'register' %}">Register Now</a>
+    </div>
+  </div>
+</body>
+</html>

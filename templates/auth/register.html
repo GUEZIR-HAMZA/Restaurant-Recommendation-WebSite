@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Registration Form</title>
+  <link rel="stylesheet" href="{% static 'auth/register.css' %}">
+  <!-- Font Awesome Cdn Link -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+  <div class="wrapper">
+    <h1>Register</h1>
+    <form method="POST" action="{% url 'register' %}">
+      {% csrf_token %}
+        <label>
+            <input type="text" placeholder="Username" name="username" required>
+        </label>
+        <label>
+            <input type="email" placeholder="Email" name="email" required>
+        </label>
+        <label>
+            <input type="password" placeholder="Password" name="password1" required>
+        </label>
+        <button type="submit">Sign up</button>
+    </form>
+    <p class="or">----- or continue with -----</p>
+    <div class="icons">
+      <i class="fab fa-google"></i>
+      <i class="fab fa-twitter"></i>
+      <i class="fab fa-facebook"></i>
+    </div>
+    <div class="already-member">
+      Already a member? <a href="{% url 'login' %}">Sign in</a>
+    </div>
+  </div>
+</body>
+</html>

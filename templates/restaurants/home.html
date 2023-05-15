@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+
+{% block content %}
+
+    <div class="container">
+  <div class="search-sort d-flex justify-content-between">
+    <div class="me-lg-3">
+      <select class="btn btn-outline-primary col-lg-20" aria-label="Default select" id="city-select" name="city">
+        <option value="">Select City</option>
+        <option value="city1">Marrakech</option>
+        <option value="city2">Casablanca</option>
+        <option value="city3">Rabat</option>
+        <option value="city4">Tanger</option>
+        <option value="city5">Fes</option>
+        <!-- Add more city options as needed -->
+      </select>
+    </div>
+    <div class="me-lg-5">
+      <button class="btn btn-secondary dropdown-toggle" type="button" data-mdb-toggle="dropdown" data-mdb-auto-close="true" aria-expanded="false">
+        Sort by
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="?sort=name">Sort by name</a></li>
+        <li><a class="dropdown-item" href="?sort=rating_desc">Sort by rating (High to Low)</a></li>
+        <li><a class="dropdown-item" href="?sort=rating_asc">Sort by rating (Low to High)</a></li>
+        <li><a class="dropdown-item" href="?sort=price_asc">Sort by price (Low to High)</a></li>
+        <li><a class="dropdown-item" href="?sort=price_desc">Sort by price (High to Low)</a></li>
+      </ul>
+    </div>
+    <div class="input-group ms-auto">
+      <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+      <button type="button" class="btn btn-outline-primary">Search</button>
+    </div>
+  </div>
+
+  <div class="Card_dex" style="margin-top: 70px">
+  <section class="restaurant-list">
+    <div class="row">
+      {% for restaurant in restaurants %}
+      <div class="col-lg-4 mx-lg-auto mb-4">
+        <div class="card text-center border border-primary shadow-0" style="background-color:#ffffff;">
+          <div id="carousel-{{ restaurant.id }}" class="carousel slide" data-mdb-ride="carousel">
+          <div class="carousel-inner">
+            {% for image in restaurant.restaurant_image_set.all %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+              <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+                <img src="{{ image.image.url }}" class="img-fluid" alt="" />
+                <a href="#">
+                  <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
+                </a>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          <button class="carousel-control-prev" type="button" data-mdb-target="#carousel-{{ restaurant.id }}" data-mdb-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-mdb-target="#carousel-{{ restaurant.id }}" data-mdb-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+          <div class="card-header">Featured</div>
+          <div class="card-body">
+            <h5 class="card-title">{{ restaurant.name }}</h5>
+            <p class="card-text">Address: {{ restaurant.address }}</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="ratings">
+                {% for i in restaurant.rating|default_if_none:0|star_range %}
+                    {% if i >= 1 %}
+                        <i class="fa fa-star" style="color: gold;"></i>
+                    {% else %}
+                        {% if restaurant.rating >= 0.5 %}
+                            <i class="fa fa-star-half-alt" style="color: gold;"></i>
+                        {% else %}
+                            <i class="fa fa-star" style="color: transparent;"></i>
+                        {% endif %}
+                    {% endif %}
+                    {% with restaurant.rating|add:-1 as restaurant.rating %}
+                    {% endwith %}
+                    {% endfor %}
+                  <span>{{ restaurant.rating }}</span>
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="location.href='restaurant_details.html/{{ restaurant.id }}'">
+              Details
+            </button>
+          </div>
+          <div class="card-footer">2 days ago</div>
+        </div>
+      </div>
+      {% if forloop.counter|divisibleby:4 %}
+      </div>
+      <div class="row">
+        {% endif %}
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+</div>
+
+  <script>
+    // Get the sort options select element
+    var sortOptions = document.getElementById('sort-options');
+
+    // Get the restaurant cards container
+    var restaurantCardsContainer = document.getElementById('restaurant-cards-container');
+
+    // Add event listener to the sort options select
+    sortOptions.addEventListener('change', function() {
+      // Get the selected sorting option
+      var selectedOption = sortOptions.value;
+
+      // Sort the restaurant cards based on the selected option
+      sortRestaurantCards(selectedOption);
+    });
+
+    // Function to sort the restaurant cards
+    function sortRestaurantCards(option) {
+      var restaurantCards = Array.from(restaurantCardsContainer.getElementsByClassName('col-md-2'));
+
+      // Sort the restaurant cards based on the selected option
+      restaurantCards.sort(function(a, b) {
+          let aValue, bValue;
+
+          if (option === 'address') {
+          // Get the address value for sorting
+          aValue = a.querySelector('.card-text').textContent.toLowerCase();
+          bValue = b.querySelector('.card-text').textContent.toLowerCase();
+        } else {
+          // Default: sort by name
+          aValue = a.querySelector('.card-title').textContent.toLowerCase();
+          bValue = b.querySelector('.card-title').textContent.toLowerCase();
+        }
+
+        return aValue.localeCompare(bValue);
+      });
+
+      // Clear the existing restaurant cards
+      while (restaurantCardsContainer.firstChild) {
+        restaurantCardsContainer.removeChild(restaurantCardsContainer.firstChild);
+      }
+
+      // Rebuild the sorted restaurant cards
+      restaurantCards.forEach(function(restaurantCard) {
+        restaurantCardsContainer.appendChild(restaurantCard);
+      });
+    }
+  </script>
+{% endblock %}
