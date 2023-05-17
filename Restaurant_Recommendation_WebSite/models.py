@@ -6,7 +6,9 @@ from io import BytesIO
 from django.core.files import File
 from django.contrib.auth.hashers import make_password, check_password
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission, Group
+from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
 
 
 class KitchenCategory(models.Model):
@@ -120,23 +122,36 @@ class Reviews(models.Model):
         return self.comment
 
 
-class Users(models.Model):
+class Users(AbstractUser):
     username = models.CharField(max_length=50, unique=True)
-    email = models.EmailField(unique=True)
-    password = models.CharField(max_length=50)
-    favorites = models.ManyToManyField(Restaurant, blank=True)
+    email = models.EmailField(unique=True, null=False)
+
+    groups = models.ManyToManyField(
+        Group,
+        verbose_name='user groups',
+        blank=True,
+        related_name='custom_user_set',
+        related_query_name='custom_user'
+    )
+    user_permissions = models.ManyToManyField(
+        Permission,
+        verbose_name='user permissions',
+        blank=True,
+        related_name='custom_user_set',
+        related_query_name='custom_user'
+    )
 
     def __str__(self):
         return self.username
 
-    def get_favorites(self):
-        return self.favorites.all()
-
-    def add_favorite(self, restaurant):
-        self.favorites.add(restaurant)
-
-    def remove_favorite(self, restaurant):
-        self.favorites.remove(restaurant)
+    # def get_favorites(self):
+    #     return self.favorites.all()
+    #
+    # def add_favorite(self, restaurant):
+    #     self.favorites.add(restaurant)
+    #
+    # def remove_favorite(self, restaurant):
+    #     self.favorites.remove(restaurant)
 
 
 class MenuItem(models.Model):

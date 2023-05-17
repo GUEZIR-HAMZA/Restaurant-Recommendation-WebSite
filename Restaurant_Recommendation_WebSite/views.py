@@ -14,6 +14,21 @@ def home(request):
     return render(request, 'restaurants/home.html', context)
 
 
+# def register_view(request):
+#     if request.method == 'POST':
+#         form = RegistrationForm(request.POST)
+#         if form.is_valid():
+#             username = form.cleaned_data['username']
+#             email = form.cleaned_data['email']
+#             password = form.cleaned_data['password']
+#             # Create a new user
+#             user = Users.objects.create(username=username, email=email, password=password)
+#             # Log the user in
+#             login(request, user)
+#             return redirect('home')  # Replace 'home' with the URL name of your home page
+#     else:
+#         form = RegistrationForm()
+#     return render(request, 'auth/register.html', {'form': form})
 def register_view(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
@@ -21,13 +36,20 @@ def register_view(request):
             username = form.cleaned_data['username']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
-            # Create a new user
-            user = Users.objects.create(username=username, email=email, password=password)
-            # Log the user in
-            login(request, user)
-            return redirect('home')  # Replace 'home' with the URL name of your home page
+
+            if Users.objects.filter(username=username).exists():
+                messages.error(request, 'Username already exists.')
+                return redirect('register')
+            elif Users.objects.filter(email=email).exists():
+                messages.error(request, 'Email already exists.')
+                return redirect('register')
+            else:
+                user = Users.objects.create(username=username, email=email, password=password)
+                login(request, user)
+                return redirect('home')
     else:
         form = RegistrationForm()
+
     return render(request, 'auth/register.html', {'form': form})
 
 
@@ -40,11 +62,12 @@ def login_view(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('home')  # Replace 'home' with the URL name of your home page
+                return redirect('home')
             else:
-                form.add_error(None, 'Invalid username or password')
+                form.add_error(None, 'Invalid credentials')
     else:
         form = LoginForm()
+
     return render(request, 'auth/login.html', {'form': form})
 
 
@@ -62,13 +85,25 @@ def search(request, search_text):
         return render(request, 'restaurants/home.html', {'restaurants': restaurants})
 
 
-# def restaurant_list(request):
-#     restaurants = Restaurant.objects.all()
-#     context = {'restaurants': restaurants}
-#     return render(request, 'home.html', context)
+#################### END RESTAURANT SEARCH ####################
 
+#################### RESTAURANT DETAILS ####################
 
 def restaurant_details(request, restaurant_id):
     restaurant = Restaurant.objects.get(id=restaurant_id)
     context = {'restaurant': restaurant}
     return render(request, 'restaurants_details/restaurant_details.html', context)
+
+
+def add_review(request, restaurant_id):
+    if request.method == 'POST':
+        rating = request.POST.get('rating')
+        comment = request.POST.get('comment')
+        restaurant = Restaurant.objects.get(id=restaurant_id)
+        user = request.user
+        restaurant.reviews.create(user=user, rating=rating, comment=comment)
+        return redirect('restaurant_details', restaurant_id=restaurant_id)
+    return render(request, 'restaurants_details/add_review.html')
+
+
+#################### END RESTAURANT DETAILS ####################

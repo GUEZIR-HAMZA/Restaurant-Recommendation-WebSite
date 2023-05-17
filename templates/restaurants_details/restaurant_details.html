@@ -1,8 +1,145 @@
 {% extends 'base.html' %}
+{% load custom_filters %}
 
 {% block content %}
-  <div class="container">
-    <h1>Restaurant Detail</h1>
-    <p>Restaurant ID: {{ restaurant.id }}</p>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" />
+  <div class="container" style="width: auto">
+    <div class="row">
+      <div class="col " style="width: 100%"> <!-- Increase the column size to make the card bigger -->
+        <div class="card text-center border border-primary shadow-0" style="background-color:#ffffff;">
+            <div class="card text-center border border-primary shadow-0" style="background-color:#ffffff;">
+                <div id="carousel-{{ restaurant.id }}" class="carousel slide" data-mdb-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for image_batch in restaurant.restaurant_image_set.all|batch:2 %}
+                            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                <div class="row">
+                                    {% for image in image_batch %}
+                                        <div class="col-lg-6">
+                                            <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+                                                <img src="{{ image.image }}" class="img-fluid" alt="" />
+                                                <a href="#">
+                                                    <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-mdb-target="#carousel-{{ restaurant.id }}" data-mdb-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-mdb-target="#carousel-{{ restaurant.id }}" data-mdb-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+
+
+
+
+            <div class="card-header">Featured</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <h5 class="card-title">{{ restaurant.name }}</h5>
+                        <div class="d-flex justify-content-between align-left">
+                            <div class="ratings">
+                                <strong>Ratings:</strong>
+                                    {% for i in restaurant.rating|default_if_none:0|star_range %}
+                                        {% if i >= 0 %}
+                                            <i class="fa fa-star" style="color: gold;"></i>
+                                        {% else %}
+                                            {% if restaurant.rating >= 0.1 %}
+                                                <i class="fa fa-star-half-alt" style="color: gold;"></i>
+                                            {% else %}
+                                                <i class="fa fa-star" style="color: transparent;"></i>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                <span>{{ restaurant.rating }}</span>
+                            </div>
+                        </div>
+                        <div class="text-left">
+                            <p class="card-text"><strong>Description:</strong> {{ restaurant.description }}</p>
+                            <p class="card-text"><strong>Cuisine:</strong> {{ restaurant.kitchen_category }}</p>
+                            <p class="card-text"><strong>Price Range:</strong> {{ restaurant.priceRange }}</p>
+                            <p class="card-text"><strong>Opening Hours:</strong> {{ restaurant.hours }}</p>
+                            <p class="card-text"><strong>Offers Delivery:</strong> {{ restaurant.offersDelivery }}</p>
+                            <p class="card-text"><strong>Accepts Reservations:</strong> {{ restaurant.acceptsReservations }}</p>
+                            <p class="card-text"><strong>Menu:</strong> <a href="{{ restaurant.menu }}" target="_blank">View Menu</a></p>
+                            <a href="{% url 'restaurant_details' restaurant.id %}" class="btn btn-primary">
+                                Details
+                            </a>
+                        </div>
+
+                    </div>
+                    <div class="col-lg-6">
+                        <p>Phone: {{ restaurant.phone }}</p>
+                        <p>Website: {{ restaurant.website }}</p>
+                        <p>Address: {{ restaurant.address }}</p>
+                        <div id="map" style="width: 100%; height: 300px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer"> 2 days ago </div>
+        </div>
+      </div>
+    </div>
   </div>
+        <script>
+          $(document).ready(function() {
+            $('#restaurantCarousel').carousel();
+          });
+    </script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
+        <script>
+            function initMap() {
+            var address = "{{ restaurant.address }}";
+            var map = L.map('map').setView([51.505, -0.09], 13);
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+             var geocoder = L.Control.Geocoder.nominatim();
+             geocoder.geocode(address, function (results) {
+                if (results && results.length > 0) {
+                    var coordinates = results[0].center;
+                    map.setView(coordinates, 15);
+                    L.marker(coordinates).addTo(map)
+                        .bindPopup('A pretty CSS popup.<br> Easily customizable.')
+                        .openPopup();
+
+                    // Ping the address
+                    pingAddress(address);
+                } else {
+                    console.log('Geocode was not successful');
+                }
+            });
+        }
+
+        function pingAddress(address) {
+            fetch(address)
+                .then(function(response) {
+                    if (response.ok) {
+                        console.log('Address is reachable');
+                    } else {
+                        console.log('Address is unreachable');
+                    }})
+                .catch(function(error) {
+                    console.log('Error occurred:', error);
+                });
+        }
+
+
+</script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        initMap();
+    });
+</script>
 {% endblock %}

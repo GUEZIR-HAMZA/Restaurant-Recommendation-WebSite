@@ -11,7 +11,7 @@
 <body>
   <div class="wrapper">
     <h1>Register</h1>
-    <form method="POST" action="{% url 'register' %}">
+    <form method="post" action="{% url 'register' %}">
       {% csrf_token %}
         <label>
             <input type="text" placeholder="Username" name="username" required>
@@ -20,7 +20,7 @@
             <input type="email" placeholder="Email" name="email" required>
         </label>
         <label>
-            <input type="password" placeholder="Password" name="password1" required>
+            <input type="password" placeholder="Password" name="password" required>
         </label>
         <button type="submit">Sign up</button>
     </form>

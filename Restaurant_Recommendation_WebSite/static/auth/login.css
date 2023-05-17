@@ -16,8 +16,8 @@ body {
 }
 
 .wrapper {
-  width: 400px;
-  padding: 2rem 0 1rem 0;
+  width: 500px;
+  padding: 3rem 0 2rem 0;
   background: #fff;
   border-radius: 10px;
   text-align: center;
@@ -26,27 +26,30 @@ body {
 }
 
 h1 {
-  font-size: 2rem;
+  font-size: 2.5rem;
   color: #07001f;
+  margin-bottom: 1.5rem;
 }
 
 p {
+  font-size: 1.2rem;
   margin-bottom: 1.7rem;
 }
 
 form input {
-  width: 85%;
+  width: 90%;
   outline: none;
   border: none;
   background: #dfe9f5;
-  padding: 12px 14px;
-  margin-bottom: 10px;
+  padding: 14px 16px;
+  margin-bottom: 15px;
   border-radius: 10px;
+  font-size: 1.2rem;
 }
 
 .recover {
   text-align: right;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   margin: 0.2rem 1.7rem 0 0;
 }
 
@@ -56,13 +59,13 @@ form input {
 }
 
 button {
-  font-size: 1.1rem;
-  margin-top: 1rem;
-  padding: 8px 0;
+  font-size: 1.2rem;
+  margin-top: 1.5rem;
+  padding: 10px 0;
   border-radius: 5px;
   outline: none;
   border: none;
-  width: 85%;
+  width: 90%;
   background: #19A7CE;
   color: #fff;
   cursor: pointer;
@@ -73,16 +76,16 @@ button:hover {
 }
 
 .or {
-  font-size: 0.8rem;
-  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  margin-top: 1.8rem;
 }
 
 .icons i {
   color: #07001f;
-  padding: 0.8rem 1.5rem;
+  padding: 1.2rem 1.8rem;
   border-radius: 10px;
-  margin-left: 0.9rem;
-  font-size: 1.5rem;
+  margin-left: 1.2rem;
+  font-size: 1.8rem;
   cursor: pointer;
   border: 2px solid #dfe9f5;
 }
@@ -102,8 +105,8 @@ button:hover {
 }
 
 .not-member {
-  font-size: 0.8rem;
-  margin-top: 1.4rem;
+  font-size: 0.9rem;
+  margin-top: 1.6rem;
 }
 
 .not-member a {
