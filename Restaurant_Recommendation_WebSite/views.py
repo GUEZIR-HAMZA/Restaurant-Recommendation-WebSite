@@ -75,9 +75,13 @@ def login_view(request):
 
 ####################### RESTAURANT SEARCH #######################
 
-def search(request, search_text):
+
+def search_view(request):
+    search_text = request.GET.get('q', '')  # Retrieve the search term from the request
+
     try:
-        restaurants = Restaurant.objects.filter(name__contains=search_text)
+        restaurants = Restaurant.objects.filter(
+            name__icontains=search_text)  # Perform case-insensitive search for restaurants matching the name
     except Restaurant.DoesNotExist:
         error_message = 'No restaurants found matching your search criteria.'
         return render(request, 'restaurants/home.html', {'error_message': error_message})

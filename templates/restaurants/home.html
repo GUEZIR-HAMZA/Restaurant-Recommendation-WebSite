@@ -3,7 +3,7 @@
 
 {% block content %}
 
-    <div class="container">
+<div class="container">
   <div class="search-sort d-flex justify-content-between">
     <div class="me-lg-3">
       <select class="btn btn-outline-primary col-lg-20" aria-label="Default select" id="city-select" name="city">
@@ -29,77 +29,99 @@
       </ul>
     </div>
     <div class="input-group ms-auto">
-      <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-      <button type="button" class="btn btn-outline-primary">Search</button>
+      <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" id="search-input" />
+      <button type="button" class="btn btn-outline-primary" id="search-button">Search</button>
     </div>
   </div>
 
   <div class="Card_dex" style="margin-top: 70px">
-  <section class="restaurant-list">
-    <div class="row">
-      {% for restaurant in restaurants %}
-      <div class="col-lg-4 mx-lg-auto mb-4">
-        <div class="card text-center border border-primary shadow-0" style="background-color:#ffffff;">
-          <div id="carousel-{{ restaurant.id }}" class="carousel slide" data-mdb-ride="carousel">
-            <div class="carousel-inner">
+    <section class="restaurant-list">
+      <div class="row" id="restaurant-cards-container">
+        {% for restaurant in restaurants %}
+        <div class="col-lg-4 mx-lg-auto mb-4">
+          <div class="card text-center border border-primary shadow-0" style="background-color:#ffffff;">
+            <div id="carousel-{{ restaurant.id }}" class="carousel slide" data-mdb-ride="carousel">
+              <div class="carousel-inner">
                 {% for image in restaurant.restaurant_image_set.all %}
-                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                        <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-                            <img src="{{ image.image }}" class="img-fluid" alt="" />
-                            <a href="#">
-                                <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
-                            </a>
-                        </div>
-                    </div>
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                  <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+                    <img src="{{ image.image }}" class="img-fluid" alt="" />
+                    <a href="#">
+                      <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
+                    </a>
+                  </div>
+                </div>
                 {% endfor %}
-            </div>
-            <button class="carousel-control-prev" type="button" data-mdb-target="#carousel-{{ restaurant.id }}" data-mdb-slide="prev">
+              </div>
+              <button class="carousel-control-prev" type="button" data-mdb-target="#carousel-{{ restaurant.id }}" data-mdb-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-mdb-target="#carousel-{{ restaurant.id }}" data-mdb-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-          </div>
-          <div class="card-header">Featured</div>
-          <div class="card-body">
-            <h5 class="card-title">{{ restaurant.name }}</h5>
-            <p class="card-text">Address: {{ restaurant.address }}</p>
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="ratings">
-                {% for i in restaurant.rating|default_if_none:0|star_range %}
-                    {% if i >= 0 %}
-                        <i class="fa fa-star" style="color: gold;"></i>
-                    {% else %}
-                        {% if restaurant.rating >= 0.1 %}
-                            <i class="fa fa-star-half-alt" style="color: gold;"></i>
-                        {% else %}
-                            <i class="fa fa-star" style="color: transparent;"></i>
-                        {% endif %}
-                    {% endif %}
-{#                    {% with restaurant.rating|add:-1 as restaurant.rating %}#}
-{#                    {% endwith %}#}
-                    {% endfor %}
-                  <span>{{ restaurant.rating }}</span>
-                </div>
-            </div>
-            <a href="{% url 'restaurant_details' restaurant.id %}" class="btn btn-primary">
-                Details
-            </a>
-          </div>
-          <div class="card-footer">2 days ago</div>
-        </div>
-      </div>
-      {% if forloop.counter|divisibleby:4 %}
-      </div>
-      <div class="row">
-        {% endif %}
-        {% endfor %}
-      </div>
-    </section>
-  </div>
+</button>
+<button class="carousel-control-next" type="button" data-mdb-target="#carousel-{{ restaurant.id }}" data-mdb-slide="next">
+<span class="carousel-control-next-icon" aria-hidden="true"></span>
+<span class="visually-hidden">Next</span>
+</button>
+
 </div>
+<div class="card-header">Featured</div>
+<div class="card-body">
+<h5 class="card-title">{{ restaurant.name }}</h5>
+<p class="card-text">Address: {{ restaurant.address }}</p>
+<div class="d-flex justify-content-center align-items-center">
+<div class="ratings" >
+{% for i in restaurant.rating|default_if_none:0|star_range %}
+{% if i >= 0 %}
+<i class="fa fa-star" style="color: gold;"></i>
+{% else %}
+{% if restaurant.rating >= 0.1 %}
+<i class="fa fa-star-half-alt" style="color: gold;"></i>
+{% else %}
+<i class="fa fa-star" style="color: transparent;"></i>
+{% endif %}
+{% endif %}
+{% endfor %}
+<span>{{ restaurant.rating }}</span>
+</div>
+</div>
+<a href="{% url 'restaurant_details' restaurant.id %}" class="btn btn-primary">
+Details
+</a>
+</div>
+<div class="card-footer">2 days ago</div>
+</div>
+</div>
+{% if forloop.counter|divisibleby:4 %}
+</div>
+<div class="row">
+{% endif %}
+{% endfor %}
+</div>
+</section>
+</div>
+</div>
+    <script>
+    var searchInput = document.getElementById('search-input');
+    var searchButton = document.getElementById('search-button');
+    var restaurantCardsContainer = document.getElementById('restaurant-cards-container');
+
+    searchButton.addEventListener('click', function() {
+        var searchTerm = searchInput.value.toLowerCase();
+        var restaurantCards = document.querySelectorAll('.Card_dex .restaurant-list .row > div');
+
+        for (const element of restaurantCards) {
+            var restaurantCard = element;
+            var restaurantName = restaurantCard.querySelector('.card-title').textContent.toLowerCase();
+
+            if (searchTerm === '' || restaurantName.includes(searchTerm)) {
+                restaurantCard.style.display = 'block';
+            } else {
+                restaurantCard.style.display = 'none';
+            }
+        }
+    });
+</script>
+
+
 
   <script>
     // Get the sort options select element
