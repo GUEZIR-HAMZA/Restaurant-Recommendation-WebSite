@@ -16,41 +16,45 @@ body {
 }
 
 .wrapper {
-  width: 400px;
-  padding: 2rem;
+  width: 500px;
+  padding: 3rem 0 2rem 0;
   background: #fff;
   border-radius: 10px;
   text-align: center;
   box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+  margin: 50px auto;
 }
 
 h1 {
-  font-size: 2rem;
+  font-size: 2.5rem;
   color: #07001f;
+  margin-bottom: 1.5rem;
 }
 
 p {
+  font-size: 1.2rem;
   margin-bottom: 1.7rem;
 }
 
 form input {
-  width: 100%;
+  width: 90%;
   outline: none;
   border: none;
   background: #dfe9f5;
-  padding: 12px 14px;
-  margin-bottom: 10px;
+  padding: 14px 16px;
+  margin-bottom: 15px;
   border-radius: 10px;
+  font-size: 1.2rem;
 }
 
 button {
-  font-size: 1.1rem;
-  margin-top: 1rem;
-  padding: 8px 0;
+  font-size: 1.2rem;
+  margin-top: 1.5rem;
+  padding: 10px 0;
   border-radius: 5px;
   outline: none;
   border: none;
-  width: 100%;
+  width: 90%;
   background: #19A7CE;
   color: #fff;
   cursor: pointer;

@@ -11,6 +11,20 @@
 <body>
   <div class="wrapper">
     <h1>Register</h1>
+
+    <!-- Add messages framework block -->
+    {% block messages %}
+    {% if messages %}
+      <div class="messages">
+        {% for message in messages %}
+          <div class="{{ message.tags }}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    {% endblock %}
+
     <form method="post" action="{% url 'register' %}">
       {% csrf_token %}
         <label>
@@ -31,8 +45,10 @@
       <i class="fab fa-facebook"></i>
     </div>
     <div class="already-member">
-      Already a member? <a href="{% url 'login' %}">Sign in</a>
+      Already a member? <a href="{% url 'login' %}">Login</a>
     </div>
   </div>
+
+  <script src="{% static 'auth/register.js' %}"></script>
 </body>
 </html>

@@ -12,6 +12,14 @@
   <div class="wrapper">
     <h1>Hello Again!</h1>
     <p>Welcome back, you've been missed!</p>
+
+    <!-- Add messages framework block -->
+    <div class="container">
+        {% include 'messages.html' %}
+        {% block content %}
+        {% endblock %}
+      </div>
+
     <form method="post" action="{% url 'login' %}">
       {% csrf_token %}
         <label>

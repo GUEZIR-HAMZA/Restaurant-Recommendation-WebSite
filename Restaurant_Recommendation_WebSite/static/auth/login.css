@@ -76,16 +76,16 @@ button:hover {
 }
 
 .or {
-  font-size: 0.9rem;
-  margin-top: 1.8rem;
+  font-size: 0.8rem;
+  margin-top: 1.5rem;
 }
 
 .icons i {
   color: #07001f;
-  padding: 1.2rem 1.8rem;
+  padding: 0.8rem 1.5rem;
   border-radius: 10px;
-  margin-left: 1.2rem;
-  font-size: 1.8rem;
+  margin-left: 0.9rem;
+  font-size: 1.5rem;
   cursor: pointer;
   border: 2px solid #dfe9f5;
 }
@@ -104,12 +104,12 @@ button:hover {
   color: blue;
 }
 
-.not-member {
-  font-size: 0.9rem;
-  margin-top: 1.6rem;
+.already-member {
+  font-size: 0.8rem;
+  margin-top: 1.4rem;
 }
 
-.not-member a {
+.already-member a {
   color: #19A7CE;
   text-decoration: none;
 }

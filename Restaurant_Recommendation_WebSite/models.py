@@ -1,14 +1,6 @@
-from typing import List
-
-import requests
-from bs4 import BeautifulSoup
-from io import BytesIO
-from django.core.files import File
-from django.contrib.auth.hashers import make_password, check_password
 from django.db import models
 from django.contrib.auth.models import User, Permission, Group
 from django.contrib.auth.models import AbstractUser
-from django.utils import timezone
 
 
 class KitchenCategory(models.Model):
@@ -18,47 +10,47 @@ class KitchenCategory(models.Model):
         return self.name
 
 
-def scrape_restaurant_data():
-    page = requests.get('https://www.tripadvisor.com/Restaurants-g293730-Morocco.html')
-    soup = BeautifulSoup(page.content, 'html.parser')
-
-    # get resaturants in each city and add them to the database
-    cities = soup.find_all('div', class_='geo_name')
-    for city in cities:
-        city_name = city.find('a').text
-        city_url = city.find('a')['href']
-        city_page = requests.get(city_url)
-        city_soup = BeautifulSoup(city_page.content, 'html.parser')
-        restaurants = city_soup.find_all('div', class_='geoList')
-        for restaurant in restaurants:
-            name = restaurant.find('a').text
-            address = restaurant.find('div', class_='item').text
-            phone_number = restaurant.find('div', class_='item').text
-            website = restaurant.find('div', class_='item').text
-            hours = restaurant.find('div', class_='item').text
-            menu = restaurant.find('div', class_='item').text
-            kitchen_category = restaurant.find('div', class_='item').text
-            price_range = restaurant.find('div', class_='item').text
-            accepts_reservations = restaurant.find('div', class_='item').text
-            offers_delivery = restaurant.find('div', class_='item').text
-            image_url = restaurant.find('img')['src']
-            image_name = f"{name}.jpg"
-            image_content = requests.get(image_url).content
-            image_file = BytesIO(image_content)
-            restaurant_obj = Restaurant.objects.create(
-                name=name,
-                address=address,
-                phone_number=phone_number,
-                website=website,
-                hours=hours,
-                menu=menu,
-                kitchen_category=kitchen_category,
-                price_range=price_range,
-                accepts_reservations=accepts_reservations,
-                offers_delivery=offers_delivery,
-            )
-            restaurant_obj.image.save(image_name, File(image_file))
-    print('Restaurants added successfully')
+# def scrape_restaurant_data():
+#     page = requests.get('https://www.tripadvisor.com/Restaurants-g293730-Morocco.html')
+#     soup = BeautifulSoup(page.content, 'html.parser')
+#
+#     # get resaturants in each city and add them to the database
+#     cities = soup.find_all('div', class_='geo_name')
+#     for city in cities:
+#         city_name = city.find('a').text
+#         city_url = city.find('a')['href']
+#         city_page = requests.get(city_url)
+#         city_soup = BeautifulSoup(city_page.content, 'html.parser')
+#         restaurants = city_soup.find_all('div', class_='geoList')
+#         for restaurant in restaurants:
+#             name = restaurant.find('a').text
+#             address = restaurant.find('div', class_='item').text
+#             phone_number = restaurant.find('div', class_='item').text
+#             website = restaurant.find('div', class_='item').text
+#             hours = restaurant.find('div', class_='item').text
+#             menu = restaurant.find('div', class_='item').text
+#             kitchen_category = restaurant.find('div', class_='item').text
+#             price_range = restaurant.find('div', class_='item').text
+#             accepts_reservations = restaurant.find('div', class_='item').text
+#             offers_delivery = restaurant.find('div', class_='item').text
+#             image_url = restaurant.find('img')['src']
+#             image_name = f"{name}.jpg"
+#             image_content = requests.get(image_url).content
+#             image_file = BytesIO(image_content)
+#             restaurant_obj = Restaurant.objects.create(
+#                 name=name,
+#                 address=address,
+#                 phone_number=phone_number,
+#                 website=website,
+#                 hours=hours,
+#                 menu=menu,
+#                 kitchen_category=kitchen_category,
+#                 price_range=price_range,
+#                 accepts_reservations=accepts_reservations,
+#                 offers_delivery=offers_delivery,
+#             )
+#             restaurant_obj.image.save(image_name, File(image_file))
+#     print('Restaurants added successfully')
 
 
 class restaurant_image(models.Model):
@@ -101,7 +93,7 @@ class Restaurant(models.Model):
 
 
 class Reviews(models.Model):
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='reviews')
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     rating = models.IntegerField()
     comment = models.TextField(blank=True, null=True)
@@ -154,11 +146,11 @@ class Users(AbstractUser):
     #     self.favorites.remove(restaurant)
 
 
-class MenuItem(models.Model):
-    name = models.CharField(max_length=50)
-    price = models.DecimalField(max_digits=6, decimal_places=2)
-    description = models.TextField(blank=True, null=True)
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.name
+# class MenuItem(models.Model):
+#     name = models.CharField(max_length=50)
+#     price = models.DecimalField(max_digits=6, decimal_places=2)
+#     description = models.TextField(blank=True, null=True)
+#     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
+#
+#     def __str__(self):
+#         return self.name

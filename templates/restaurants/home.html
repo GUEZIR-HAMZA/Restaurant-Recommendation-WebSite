@@ -2,7 +2,6 @@
 {% load custom_filters %}
 
 {% block content %}
-
 <div class="container">
   <div class="search-sort d-flex justify-content-between">
     <div class="me-lg-3">
@@ -13,7 +12,6 @@
         <option value="city3">Rabat</option>
         <option value="city4">Tanger</option>
         <option value="city5">Fes</option>
-        <!-- Add more city options as needed -->
       </select>
     </div>
     <div class="me-lg-5">
@@ -33,7 +31,6 @@
       <button type="button" class="btn btn-outline-primary" id="search-button">Search</button>
     </div>
   </div>
-
   <div class="Card_dex" style="margin-top: 70px">
     <section class="restaurant-list">
       <div class="row" id="restaurant-cards-container">
@@ -56,45 +53,53 @@
               <button class="carousel-control-prev" type="button" data-mdb-target="#carousel-{{ restaurant.id }}" data-mdb-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
-</button>
-<button class="carousel-control-next" type="button" data-mdb-target="#carousel-{{ restaurant.id }}" data-mdb-slide="next">
-<span class="carousel-control-next-icon" aria-hidden="true"></span>
-<span class="visually-hidden">Next</span>
-</button>
-
-</div>
-<div class="card-header">Featured</div>
-<div class="card-body">
-<h5 class="card-title">{{ restaurant.name }}</h5>
-<p class="card-text">Address: {{ restaurant.address }}</p>
-<div class="d-flex justify-content-center align-items-center">
-<div class="ratings" >
-{% for i in restaurant.rating|default_if_none:0|star_range %}
-{% if i >= 0 %}
-<i class="fa fa-star" style="color: gold;"></i>
-{% else %}
-{% if restaurant.rating >= 0.1 %}
-<i class="fa fa-star-half-alt" style="color: gold;"></i>
-{% else %}
-<i class="fa fa-star" style="color: transparent;"></i>
-{% endif %}
-{% endif %}
-{% endfor %}
-<span>{{ restaurant.rating }}</span>
-</div>
-</div>
-<a href="{% url 'restaurant_details' restaurant.id %}" class="btn btn-primary">
-Details
-</a>
-</div>
-<div class="card-footer">2 days ago</div>
-</div>
-</div>
-{% if forloop.counter|divisibleby:4 %}
-</div>
-<div class="row">
-{% endif %}
-{% endfor %}
+              </button>
+              <button class="carousel-control-next" type="button" data-mdb-target="#carousel-{{ restaurant.id }}" data-mdb-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+            <div class="card-header">Featured</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ restaurant.name }}</h5>
+                <p class="card-text">Address: {{ restaurant.address }}</p>
+                <div class="d-flex justify-content-center align-items-center">
+                    <div class="ratings" >
+                        {% for i in restaurant.rating|default_if_none:0|star_range %}
+                            {% if i >= 0 %}
+                                <i class="fa fa-star" style="color: gold;"></i>
+                            {% else %}
+                                {% if restaurant.rating >= 0.1 %}
+                                    <i class="fa fa-star-half-alt" style="color: gold;"></i>
+                                {% else %}
+                                    <i class="fa fa-star" style="color: transparent;"></i>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        <span>{{ restaurant.rating }}</span>
+                    </div>
+                </div>
+                <p class="card-text">Price range: {{ restaurant.priceRange }}</p>
+                {% if request.session.user_id %}
+                        <a href="{% url 'restaurant_details' restaurant.id %}" class="btn btn-primary">
+                            Details
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-primary">
+                            Sign in to view details
+                        </a>
+                    {% endif %}
+            </div>
+            <div class="card-footer">
+              <p>Total Reviews: {{ restaurant.review_set.count }}</p>
+            </div>
+          </div>
+        </div>
+        {% if forloop.counter|divisibleby:4 %}
+      </div>
+      <div class="row">
+        {% endif %}
+  {%  endfor %}
 </div>
 </section>
 </div>

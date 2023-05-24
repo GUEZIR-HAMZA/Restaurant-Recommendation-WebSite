@@ -1,6 +1,7 @@
+import http.client
+
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login, logout
 from django.shortcuts import render, redirect
 
 from Restaurant_Recommendation_WebSite.forms import RegistrationForm, LoginForm
@@ -29,6 +30,7 @@ def home(request):
 #     else:
 #         form = RegistrationForm()
 #     return render(request, 'auth/register.html', {'form': form})
+
 def register_view(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
@@ -37,16 +39,24 @@ def register_view(request):
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
 
-            if Users.objects.filter(username=username).exists():
-                messages.error(request, 'Username already exists.')
+            try:
+                user = Users.objects.get(username=username)
+                messages.error(request, 'Username already exists.', extra_tags='danger')
                 return redirect('register')
-            elif Users.objects.filter(email=email).exists():
-                messages.error(request, 'Email already exists.')
+            except Users.DoesNotExist:
+                pass
+
+            try:
+                user = Users.objects.get(email=email)
+                messages.error(request, 'Email already exists.', extra_tags='danger')
                 return redirect('register')
-            else:
-                user = Users.objects.create(username=username, email=email, password=password)
-                login(request, user)
-                return redirect('home')
+            except Users.DoesNotExist:
+                pass
+
+            # user = Users.objects.create(username=username, email=email, password=password)
+            # login(request, user)
+            messages.success(request, 'Account created successfully.', extra_tags='success')
+            return redirect('login')
     else:
         form = RegistrationForm()
 
@@ -55,20 +65,30 @@ def register_view(request):
 
 def login_view(request):
     if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect('home')
-            else:
-                form.add_error(None, 'Invalid credentials')
+        username = request.POST['username']
+        password = request.POST['password']
+        try:
+            user = Users.objects.get(username=username, password=password)
+        except Users.DoesNotExist:
+            user = None
+
+        if user is not None:
+            request.session['user_id'] = user.id
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.error(request, 'Invalid username and/or password.', extra_tags='danger')
+            return redirect('login')
     else:
         form = LoginForm()
 
     return render(request, 'auth/login.html', {'form': form})
+
+
+def logout_view(request):
+    logout(request)
+    request.session.clear()  # Clear the session data
+    return redirect('home')
 
 
 #################### END USER AUTHENTICATION ####################
@@ -108,6 +128,5 @@ def add_review(request, restaurant_id):
         restaurant.reviews.create(user=user, rating=rating, comment=comment)
         return redirect('restaurant_details', restaurant_id=restaurant_id)
     return render(request, 'restaurants_details/add_review.html')
-
 
 #################### END RESTAURANT DETAILS ####################

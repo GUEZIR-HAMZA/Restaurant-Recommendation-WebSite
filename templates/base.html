@@ -35,8 +35,8 @@
             <!-- Navbar brand -->
             <a class="navbar-brand me-2" href="">
                 <img
-                    src=""
-                    height="16"
+                    src="https://st.depositphotos.com/63963752/59645/v/600/depositphotos_596452870-stock-illustration-rrw-letter-logo-design-white.jpg"
+                    height="50"
                     alt="RrW"
                     loading="lazy"
                     style="margin-top: -1px;"
@@ -61,14 +61,28 @@
                 <!-- Left links -->
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">ReLuxe</a>
+                        <a class="nav-link" href="#">Restaurant Recommendation Website</a>
                     </li>
                 </ul>
                 <!-- Left links -->
 
                 <div class="d-flex align-items-center">
-                    <a class="btn btn-link px-3 me-2" href="{% url 'login' %}">Login</a>
-                    <a class="btn btn-primary me-3" href="{% url 'register' %}">Sign up</a>
+                    {% if request.session.user_id %}
+                        <!-- Show authenticated user links -->
+                        <a class="btn btn-primary me-3" href="{% url 'home' %}">Home</a>
+                        <a class="btn btn-link px-3 me-2" href="{% url 'logout' %}" onclick="logoutConfirmation()">Logout</a>
+                        <script>
+                          function logoutConfirmation() {
+                            if (confirm('Are you sure you want to logout?')) {
+                              window.location.href = "{% url 'logout' %}";
+                            }
+                          }
+                        </script>
+                    {% else %}
+                        <!-- Show links for non-authenticated user -->
+                        <a class="btn btn-link px-3 me-2" href="{% url 'login' %}">Login</a>
+                        <a class="btn btn-primary me-3" href="{% url 'register' %}">Sign up</a>
+                    {% endif %}
                 </div>
             </div>
             <!-- Collapsible wrapper -->
